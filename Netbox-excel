@@ -1,0 +1,82 @@
+
+import pynetbox
+import pandas as pd
+
+# Connect to NetBox
+netbox_url = "http://your-netbox-instance-url"  # Replace with your NetBox URL
+netbox_token = "your-netbox-api-token"  # Replace with your NetBox API token
+nb = pynetbox.api(netbox_url, token=netbox_token)
+
+# Define categories and their subcategories with actual API endpoints
+categories = {
+    "Organization": ["sites", "regions", "tenants"],
+    "Devices": ["device_roles", "device_types", "devices", "interfaces"],
+    "Connections": ["cables", "console_ports", "console_server_ports", "power_ports", "power_outlets"],
+    "Wireless": ["wireless_lans", "wireless_links"],
+    "IPAM": ["ip_addresses", "prefixes", "vlans", "vrfs"],
+    "Virtualization": ["virtual_machines", "clusters"],
+    "Circuits": ["circuit_types", "circuits", "providers"],
+    "Power": ["power_feeds", "power_panels"],
+    "Customization": ["custom_fields", "tags"],
+}
+
+# Function to fetch data for each subcategory
+def fetch_data(api, extra_fields=None):
+    try:
+        data = api.all()
+        if data:
+            results = []
+            for item in data:
+                serialized = item.serialize()
+                # Add extra fields for devices if applicable
+                if extra_fields:
+                    for field in extra_fields:
+                        serialized[field] = getattr(item, field, None)
+                results.append(serialized)
+            return results
+        else:
+            print(f"No data found for endpoint: {api}")
+            return []
+    except Exception as e:
+        print(f"Error fetching data: {e}")
+        return []
+
+# Create an Excel writer to store all the data
+output_file = "NetBox_Full_Details.xlsx"
+with pd.ExcelWriter(output_file) as writer:
+    # Iterate through each category and subcategory
+    for category, subcategories in categories.items():
+        for subcategory in subcategories:
+            try:
+                print(f"Fetching data for {subcategory} under {category}...")
+                # Access the endpoint dynamically
+                endpoint = getattr(nb, subcategory, None)
+                if not endpoint:
+                    print(f"Subcategory '{subcategory}' does not exist.")
+                    continue
+                
+                # Fetch data with extra fields for 'devices'
+                if subcategory == "devices":
+                    extra_fields = ["status", "site", "role", "manufacturer"]
+                    data = fetch_data(endpoint, extra_fields=extra_fields)
+                else:
+                    data = fetch_data(endpoint)
+                
+                if data:
+                    # Convert to Pandas DataFrame
+                    df = pd.DataFrame(data)
+                    # Expand related fields (site, role, manufacturer, etc.)
+                    if subcategory == "devices":
+                        df["site"] = df["site"].apply(lambda x: x["name"] if isinstance(x, dict) else None)
+                        df["role"] = df["device_role"].apply(lambda x: x["name"] if isinstance(x, dict) else None)
+                        df["manufacturer"] = df["device_type"].apply(lambda x: x["manufacturer"]["name"] if isinstance(x, dict) and "manufacturer" in x else None)
+                    
+                    # Write to a new sheet, truncating sheet names to 31 characters
+                    sheet_name = f"{category}_{subcategory}"[:31]
+                    df.to_excel(writer, sheet_name=sheet_name, index=False)
+                else:
+                    print(f"No data available for {subcategory}. Skipping...")
+            except Exception as e:
+                print(f"Error processing {subcategory}: {e}")
+
+print(f"All details exported successfully to {output_file}")
