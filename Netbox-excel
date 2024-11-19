@@ -1,50 +1,30 @@
 
 import pynetbox
-import pandas as pd
+import logging
 
-# NetBox API Configuration
-netbox_url = "http://10.133.35.137:8000"  # Replace with your NetBox URL
+# Enable debugging
+logging.basicConfig(level=logging.DEBUG)
+
+# Connect to NetBox
+netbox_url = "http://your-netbox-instance-url"  # Replace with your NetBox URL
 netbox_token = "your-netbox-api-token"  # Replace with your NetBox API token
-
-# Connect to NetBox API
 nb = pynetbox.api(netbox_url, token=netbox_token)
 
-# Define the resources to fetch and their associated API endpoints
-resources = {
-    "Devices": nb.dcim.devices,
-    "Sites": nb.dcim.sites,
-    "Racks": nb.dcim.racks,
-    "Device Roles": nb.dcim.device_roles,
-    "Device Types": nb.dcim.device_types,
-    "Interfaces": nb.dcim.interfaces,
-    "IP Addresses": nb.ipam.ip_addresses,
-    "Custom Fields": nb.extras.custom_fields,
-}
+# Test connection
+try:
+    print("NetBox status:", nb.status())
+except Exception as e:
+    print(f"Error connecting to NetBox: {e}")
+    exit()
 
-# Function to fetch and flatten data
-def fetch_and_flatten_data(api_endpoint):
-    try:
-        # Fetch all records from the endpoint
-        records = api_endpoint.all()
-        if not records:
-            return pd.DataFrame()  # Return empty DataFrame if no data
-        # Convert to a list of dictionaries (flattened format)
-        return pd.DataFrame([record._full_cache for record in records])
-    except Exception as e:
-        print(f"Error fetching data from {api_endpoint}: {e}")
-        return pd.DataFrame()  # Return empty DataFrame on error
+# Check available endpoints
+print("Available API endpoints:")
+for endpoint in dir(nb):
+    print(endpoint)
 
-# Output Excel File
-output_file = "NetBox_Exported_Data.xlsx"
-
-# Create an Excel writer to save the data
-with pd.ExcelWriter(output_file) as writer:
-    for resource_name, api_endpoint in resources.items():
-        print(f"Fetching data for {resource_name}...")
-        data = fetch_and_flatten_data(api_endpoint)
-        if not data.empty:
-            # Save the data to an Excel sheet
-            data.to_excel(writer, sheet_name=resource_name[:31], index=False)
-        else:
-            print(f"No data found for {resource_name}.")
-print(f"Data successfully exported to {output_file}")
+# Test a specific endpoint
+try:
+    devices = nb.dcim.devices.all()
+    print("Fetched devices:", devices)
+except Exception as e:
+    print(f"Error fetching devices: {e}")
