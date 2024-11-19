@@ -1,30 +1,51 @@
 
-import pynetbox
-import logging
+import requests
+import pandas as pd
 
-# Enable debugging
-logging.basicConfig(level=logging.DEBUG)
-
-# Connect to NetBox
-netbox_url = "http://your-netbox-instance-url"  # Replace with your NetBox URL
+# NetBox API Configuration
+netbox_url = "http://10.133.35.137:8000/api/"
 netbox_token = "your-netbox-api-token"  # Replace with your NetBox API token
-nb = pynetbox.api(netbox_url, token=netbox_token)
 
-# Test connection
-try:
-    print("NetBox status:", nb.status())
-except Exception as e:
-    print(f"Error connecting to NetBox: {e}")
-    exit()
+# Headers for API Authentication
+headers = {
+    "Authorization": f"Token {netbox_token}",
+    "Content-Type": "application/json",
+}
 
-# Check available endpoints
-print("Available API endpoints:")
-for endpoint in dir(nb):
-    print(endpoint)
+# Define endpoints to fetch data
+endpoints = {
+    "dcim": ["devices", "sites", "racks", "interfaces", "device_roles", "device_types"],
+    "ipam": ["ip-addresses", "prefixes", "vlans", "vrfs"],
+}
 
-# Test a specific endpoint
-try:
-    devices = nb.dcim.devices.all()
-    print("Fetched devices:", devices)
-except Exception as e:
-    print(f"Error fetching devices: {e}")
+# Output Excel File
+output_file = "NetBox_Dcim_Ipam_Data.xlsx"
+
+# Function to fetch and flatten data from an API endpoint
+def fetch_and_flatten_data(api_url):
+    data = []
+    next_url = api_url
+    while next_url:
+        response = requests.get(next_url, headers=headers)
+        if response.status_code != 200:
+            print(f"Failed to fetch data from {next_url}. Status code: {response.status_code}")
+            break
+        response_data = response.json()
+        if "results" in response_data:
+            data.extend(response_data["results"])  # Fetch results
+        next_url = response_data.get("next")  # Handle pagination
+    return pd.DataFrame(data) if data else pd.DataFrame()
+
+# Create an Excel writer to save the data
+with pd.ExcelWriter(output_file) as writer:
+    for category, resource_list in endpoints.items():
+        for resource in resource_list:
+            print(f"Fetching data for {category}/{resource}...")
+            api_url = f"{netbox_url}{category}/{resource}/"
+            data = fetch_and_flatten_data(api_url)
+            if not data.empty:
+                # Save the data to an Excel sheet
+                data.to_excel(writer, sheet_name=f"{category}_{resource[:31]}", index=False)
+            else:
+                print(f"No data found for {category}/{resource}.")
+print(f"Data successfully exported to {output_file}")
