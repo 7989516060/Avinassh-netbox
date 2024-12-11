@@ -1,0 +1,14 @@
+
+import subprocess
+
+commands = [
+    "genie learn routing --testbed-file testbed.yaml --output pre-change",
+    "genie learn ospf --testbed-file testbed.yaml --output pre-change"
+]
+
+for command in commands:
+    process = subprocess.run(command, shell=True, check=True)
+    if process.returncode == 0:
+        print(f"Command '{command}' executed successfully.")
+    else:
+        print(f"Command '{command}' failed.")
