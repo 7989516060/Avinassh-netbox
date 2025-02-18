@@ -1,0 +1,40 @@
+
+import sysrepo
+import dbus
+import time
+
+def send_notification(message):
+    """Send a desktop notification."""
+    try:
+        bus = dbus.SessionBus()
+        notify_service = bus.get_object("org.freedesktop.Notifications", "/org/freedesktop/Notifications")
+        notify_interface = dbus.Interface(notify_service, "org.freedesktop.Notifications")
+        notify_interface.Notify("Sysrepo Watcher", 0, "", "YANG Module Installed", message, [], {}, -1)
+    except Exception as e:
+        print(f"Notification Error: {e}")
+
+def module_change_cb(session, module_name, event, private_ctx):
+    """Callback function when a YANG module change is detected."""
+    if event == sysrepo.SR_EV_ENABLED:
+        if module_name == "ietf-interfaces":
+            send_notification(f"Module '{module_name}' has been installed and enabled.")
+            print(f"Notification Sent: {module_name} installed.")
+
+def monitor_modules():
+    """Monitor sysrepo for module installation events."""
+    conn = sysrepo.SysrepoConnection()
+    session = conn.start_session()
+    subscribe = session.subscribe_module_change("ietf-interfaces", module_change_cb)
+
+    print("Monitoring for 'ietf-interfaces' installation...")
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        print("\nStopping monitoring...")
+        subscribe.unsubscribe()
+        session.stop()
+        conn.disconnect()
+
+if __name__ == "__main__":
+    monitor_modules()
