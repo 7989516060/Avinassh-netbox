@@ -1,0 +1,203 @@
+#import
+import os
+import subprocess
+import logging
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+
+def import_configuration_data(config_file):
+    try:
+        if not os.path.isfile(config_file):
+            logging.error(f"Error: The file {config_file} does not exist.")
+            return
+
+        command = ["sysrepocfg", "--import", config_file, "--datastore", "running", "--module", "ietf-netconf-acm"]
+        result = subprocess.run(command, capture_output=True, text=True, check=True)
+
+        if result.returncode == 0:
+            logging.info(f"Configuration from '{config_file}' successfully imported to Sysrepo.")
+        else:
+            logging.error(f"Error occurred: {result.stderr}")
+    except subprocess.CalledProcessError as e:
+        logging.error(f"Subprocess error occurred: {e}")
+    except FileNotFoundError as e:
+        logging.error(f"Command or file not found: {e}")
+    except Exception as e:
+        logging.error(f"Unexpected error occurred: {e}")
+
+___________________________________________________________________________________________________________________________________________________________________
+import subprocess
+import logging
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+
+def export_device_configuration(file_path, datastore="running", module="ietf-netconf-acm", format="xml"):
+    command = ["sysrepocfg", "--export"]
+
+    if file_path:
+        command.append(file_path)
+    if datastore:
+        command.extend(["--datastore", datastore])
+    if module:
+        command.extend(["--module", module])
+    if format:
+        command.extend(["--format", format])
+
+    try:
+        result = subprocess.run(command, capture_output=True, text=True, check=True)
+        logging.info(f"Export successful: \n{result.stdout}")
+    except subprocess.CalledProcessError as e:
+        logging.error(f"Error occurred while executing the export command: {e.stderr}")
+    except FileNotFoundError:
+        logging.error("sysrepocfg command not found. Please ensure it is installed and available in the PATH.")
+    except Exception as e:
+        logging.error(f"An unexpected error occurred: {str(e)}")
+
+#export
+
+___________________________________________________________________________________________________________________________________________________________________
+
+#install yang modulesimport os
+import subprocess
+import logging
+
+class YANGInstaller:
+    def __init__(self, yang_module, yang_directory, log_file="yang_installation.log"):
+        self.yang_module = yang_module
+        self.yang_directory = yang_directory
+        self.log_file = log_file
+        self.parsed_yang = set()  # Tracks parsed YANG modules to avoid processing them multiple times
+        self.install_order = []  # Order of modules to install
+        self.module_cache = {}  # Cache for module paths
+        self.installed_modules = []  # List to track installed module names
+
+        # Set up logging
+        logging.basicConfig(filename=self.log_file, level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+        self.logger = logging.getLogger()
+
+        console_handler = logging.StreamHandler()
+        console_handler.setLevel(logging.CRITICAL)
+        self.logger.addHandler(console_handler)
+
+        self.scan_modules()
+
+    def scan_modules(self):
+        """Scan the provided YANG directory for YANG modules and resolve dependencies for the given module."""
+        try:
+            if not os.path.isdir(self.yang_directory):  # Ensure that the directory exists
+                self.logger.error(f"Error: {self.yang_directory} is not a valid directory.")
+                return
+
+            # Cache all modules in the directory
+            self._cache_modules(self.yang_directory)
+
+            # Now parse the provided YANG module and resolve dependencies
+            if self.yang_module not in self.module_cache:
+                self.logger.error(f"Error: Module {self.yang_module} not found in the directory.")
+                return
+
+            # Start parsing from the given YANG module
+            self._parse_modules(self.module_cache[self.yang_module])
+
+            # Install the modules in the correct order
+            self.install_modules()
+
+            # At the end, list installed module names
+            self.list_installed_modules()
+
+        except Exception as e:
+            self.logger.error(f"An error occurred during module scanning: {e}")
+
+    def _cache_modules(self, dir_path):
+        """Cache all YANG module paths for fast lookups."""
+        try:
+            for root, dirs, files in os.walk(dir_path):
+                for file_name in files:
+                    if file_name.endswith(".yang"):
+                        file_path = os.path.join(root, file_name)
+                        self.module_cache[file_name] = file_path
+        except Exception as e:
+            self.logger.error(f"Error while caching modules from {dir_path}: {e}")
+
+    def _parse_modules(self, file_path):
+        """Parse a module recursively for imports and resolve the install order."""
+        visited_files = set()  # To avoid re-parsing the same file
+
+        try:
+            # Start by parsing the given YANG module and its dependencies
+            if file_path not in visited_files:
+                visited_files.add(file_path)
+                self._parse_recursively(file_path, visited_files)
+
+        except Exception as e:
+            self.logger.error(f"Error while parsing modules: {e}")
+
+    def _parse_recursively(self, file_path, visited_files):
+        """Parse a YANG module and its dependencies recursively."""
+        try:
+            with open(file_path, "r") as file:
+                for line in file:
+                    line = line.strip()
+                    if line.startswith("import "):
+                        module_name = line.split()[1]
+                        if module_name not in self.parsed_yang:
+                            self.logger.info(f"Importing: {module_name}")
+                            new_file_path = self.find_import_path(module_name)
+                            if new_file_path:
+                                self._parse_recursively(new_file_path, visited_files)
+                                self.parsed_yang.add(module_name)
+                            else:
+                                self.logger.warning(f"Module {module_name} not found in the directory tree.")
+
+            # Add the module to install order if not already queued
+            if file_path not in self.install_order:
+                self.install_order.append(file_path)
+                self.logger.info(f"Queued {file_path} for installation")
+
+        except Exception as e:
+            self.logger.error(f"Error processing {file_path}: {e}")
+
+    def find_import_path(self, module_name):
+        """Find the full path of an imported YANG module."""
+        return self.module_cache.get(f"{module_name}.yang")
+
+    def install_modules(self):
+        """Install all modules in the correct order."""
+        print("Installing modules in the following order:")
+
+        # Install each module in the correct order
+        for module in self.install_order:
+            self._install_module(module)
+
+    def _install_module(self, file_path):
+        """Install a single YANG module using sysrepoctl."""
+        try:
+            module_name = os.path.basename(file_path)  # Extract the module name from the file path
+            print(f"Installing YANG module: {module_name}")
+            result = subprocess.run(["sysrepoctl", "--install", file_path], check=True, capture_output=True)
+            if result.returncode == 0:
+                self.logger.info(f"Successfully installed {module_name}")
+                print(f"Successfully installed {module_name}")
+                self.installed_modules.append(module_name)  # Add the module name to the installed list
+            else:
+                self.logger.error(f"Failed to install {module_name}: {result.stderr.decode()}")
+                print(f"Failed to install {module_name}: {result.stderr.decode()}")
+
+        except subprocess.CalledProcessError as e:
+            self.logger.error(f"Failed to install {file_path}: {e}")
+            print(f"Failed to install {file_path}: {e}")
+
+    def list_installed_modules(self):
+        """List all the successfully installed YANG module names."""
+        print("\nSuccessfully installed the following YANG modules:")
+        for module_name in self.installed_modules:
+            print(module_name)
+
+if __name__ == "__main__":
+    # Get input for the specific YANG module and the directory containing YANG modules
+    yang_module = input("Please enter the YANG module to install (e.g., openconfig-pcep.yang): ").strip()
+    yang_directory = input("Please enter the YANG directory containing dependencies: ").strip()
+
+    # Initialize the installer and start processing
+    yang_installer = YANGInstaller(yang_module, yang_directory)
+
