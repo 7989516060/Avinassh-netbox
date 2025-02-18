@@ -1,0 +1,48 @@
+
+import subprocess
+import time
+import dbus
+
+def send_notification(message):
+    """Send a desktop notification using DBus."""
+    try:
+        bus = dbus.SessionBus()
+        notify_service = bus.get_object("org.freedesktop.Notifications", "/org/freedesktop/Notifications")
+        notify_interface = dbus.Interface(notify_service, "org.freedesktop.Notifications")
+        # The Notify() parameters are: app_name, replaces_id, app_icon, summary, body, actions, hints, expire_timeout.
+        notify_interface.Notify("Sysrepo Watcher", 0, "", "YANG Module Installed", message, [], {}, -1)
+    except Exception as e:
+        print(f"Notification Error: {e}")
+
+def check_module_installed(module_name="ietf-interfaces"):
+    """
+    Uses subprocess to run 'sysrepoctl -l' and check if the given module is installed.
+    Returns True if installed, False otherwise.
+    """
+    try:
+        result = subprocess.run(["sysrepoctl", "-l"], capture_output=True, text=True)
+        if result.returncode == 0:
+            # Check if the module name appears in the output.
+            if module_name in result.stdout:
+                return True
+            else:
+                return False
+        else:
+            print("Error running sysrepoctl -l:", result.stderr)
+            return False
+    except Exception as e:
+        print(f"Exception during module check: {e}")
+        return False
+
+def monitor_module_installation(module_name="ietf-interfaces"):
+    """Poll for module installation and send a notification once installed."""
+    print(f"Monitoring for '{module_name}' installation...")
+    while True:
+        if check_module_installed(module_name):
+            send_notification(f"Module '{module_name}' has been installed and enabled.")
+            print(f"Notification Sent: {module_name} installed.")
+            break  # Exit after notification. Remove this break if you want continuous monitoring.
+        time.sleep(5)
+
+if __name__ == "__main__":
+    monitor_module_installation()
