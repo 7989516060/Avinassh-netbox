@@ -1,0 +1,193 @@
+tcs@tcs-01HW531513:~/Sysrepo$ sudo systemctl start sysrepo-plugind
+Job for sysrepo-plugind.service failed because the control process exited with error code.
+See "systemctl status sysrepo-plugind.service" and "journalctl -xeu sysrepo-plugind.service" for details.
+tcs@tcs-01HW531513:~/Sysrepo$ sudo journalctl -xeu sysrepo-plugind.service
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ A start job for unit sysrepo-plugind.service has finished with a failure.
+░░ 
+░░ The job identifier is 45330 and the job result is failed.
+Feb 27 15:24:19 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Scheduled restart job, restart counter is at 5.
+░░ Subject: Automatic restarting of a unit has been scheduled
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ Automatic restarting of the unit sysrepo-plugind.service has been scheduled, as the result for
+░░ the configured Restart= setting for the unit.
+Feb 27 15:24:19 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Start request repeated too quickly.
+Feb 27 15:24:19 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ The unit sysrepo-plugind.service has entered the 'failed' state with result 'exit-code'.
+Feb 27 15:24:19 tcs-01HW531513 systemd[1]: Failed to start sysrepo-plugind.service - Sysrepo plugin daemon.
+░░ Subject: A start job for unit sysrepo-plugind.service has failed
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ A start job for unit sysrepo-plugind.service has finished with a failure.
+░░ 
+░░ The job identifier is 45421 and the job result is failed.
+
+tcs@tcs-01HW531513:~/Sysrepo$ tcs@tcs-01HW531513:~/Sysrepo$ sudo systemctl start sysrepo-plugind
+Job for sysrepo-plugind.service failed because the control process exited with error code.
+See "systemctl status sysrepo-plugind.service" and "journalctl -xeu sysrepo-plugind.service" for details.
+tcs@tcs-01HW531513:~/Sysrepo$ sudo journalctl -xeu sysrepo-plugind.service
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ A start job for unit sysrepo-plugind.service has finished with a failure.
+░░ 
+░░ The job identifier is 45330 and the job result is failed.
+Feb 27 15:24:19 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Scheduled restart job, restart counter is at 5.
+░░ Subject: Automatic restarting of a unit has been scheduled
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ Automatic restarting of the unit sysrepo-plugind.service has been scheduled, as the result for
+░░ the configured Restart= setting for the unit.
+Feb 27 15:24:19 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Start request repeated too quickly.
+Feb 27 15:24:19 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ The unit sysrepo-plugind.service has entered the 'failed' state with result 'exit-code'.
+Feb 27 15:24:19 tcs-01HW531513 systemd[1]: Failed to start sysrepo-plugind.service - Sysrepo plugin daemon.
+░░ Subject: A start job for unit sysrepo-plugind.service has failed
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+lines 1473-1499/1499 (END)5421 and the job result is failed. with a failure.
+bash: tcs@tcs-01HW531513:~/Sysrepo$: No such file or directory
+Command 'Job' not found, did you mean:
+  command 'mob' from snap mob-sh (4.2.0)
+  command 'wob' from deb wob (0.14.2-1)
+See 'snap info <snapname>' for additional versions.
+Command 'See' not found, did you mean:
+  command 'ree' from deb ree (1.4.1-2)
+  command 'pee' from deb moreutils (0.67-1)
+  command 'tee' from deb coreutils (9.4-2ubuntu2)
+  command 'see' from deb mailcap (3.70+nmu1ubuntu1)
+Try: sudo apt install <deb name>
+bash: tcs@tcs-01HW531513:~/Sysrepo$: No such file or directory
+░░: command not found
+░░: command not found
+░░: command not found
+░░: command not found
+░░: command not found
+Feb: command not found
+░░: command not found
+░░: command not found
+░░: command not found
+░░: command not found
+░░: command not found
+░░: command not found
+Feb: command not found
+Feb: command not found
+░░: command not found
+░░: command not found
+^C
+░░: command not found
+░░: command not found
+Feb: command not found
+░░: command not found
+^C░░: command not found
+░░: command not found
+░░: command not found
+░░: command not found
+░░: command not found
+bash: syntax error near unexpected token `('
+tcs@tcs-01HW531513:~/Sysrepo$ sudo journalctl -u sysrepo-plugind.service --since "10 minutes ago"
+Feb 27 15:18:52 tcs-01HW531513 systemd[1]: Starting sysrepo-plugind.service - Sysrepo plugin daemon...
+Feb 27 15:18:52 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Main process exited, code=exited, status=1/FAILURE
+Feb 27 15:18:52 tcs-01HW531513 sysrepo-plugind[37691]: [ERR] Shared memory repository path mismatch (in SHM "/home/tcs/Sysrepo/>
+Feb 27 15:18:52 tcs-01HW531513 sysrepo-plugind[37691]: sysrepo-plugind error: Failed to connect (Operation not supported)
+Feb 27 15:18:52 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Failed with result 'exit-code'.
+Feb 27 15:18:52 tcs-01HW531513 systemd[1]: Failed to start sysrepo-plugind.service - Sysrepo plugin daemon.
+Feb 27 15:18:52 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Scheduled restart job, restart counter is at 1.
+Feb 27 15:18:52 tcs-01HW531513 systemd[1]: Starting sysrepo-plugind.service - Sysrepo plugin daemon...
+Feb 27 15:18:52 tcs-01HW531513 sysrepo-plugind[37694]: [ERR] Shared memory repository path mismatch (in SHM "/home/tcs/Sysrepo/>
+Feb 27 15:18:52 tcs-01HW531513 sysrepo-plugind[37694]: sysrepo-plugind error: Failed to connect (Operation not supported)
+Feb 27 15:18:52 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Main process exited, code=exited, status=1/FAILURE
+Feb 27 15:18:52 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Failed with result 'exit-code'.
+Feb 27 15:18:52 tcs-01HW531513 systemd[1]: Failed to start sysrepo-plugind.service - Sysrepo plugin daemon.
+Feb 27 15:18:52 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Scheduled restart job, restart counter is at 2.
+Feb 27 15:18:53 tcs-01HW531513 systemd[1]: Starting sysrepo-plugind.service - Sysrepo plugin daemon...
+Feb 27 15:18:53 tcs-01HW531513 sysrepo-plugind[37696]: [ERR] Shared memory repository path mismatch (in SHM "/home/tcs/Sysrepo/>
+Feb 27 15:18:53 tcs-01HW531513 sysrepo-plugind[37696]: sysrepo-plugind error: Failed to connect (Operation not supported)
+Feb 27 15:18:53 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Main process exited, code=exited, status=1/FAILURE
+Feb 27 15:18:53 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Failed with result 'exit-code'.
+Feb 27 15:18:53 tcs-01HW531513 systemd[1]: Failed to start sysrepo-plugind.service - Sysrepo plugin daemon.
+Feb 27 15:18:53 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Scheduled restart job, restart counter is at 3.
+Feb 27 15:18:53 tcs-01HW531513 systemd[1]: Starting sysrepo-plugind.service - Sysrepo plugin daemon...
+Feb 27 15:18:53 tcs-01HW531513 sysrepo-plugind[37698]: [ERR] Shared memory repository path mismatch (in SHM "/home/tcs/Sysrepo/>
+Feb 27 15:18:53 tcs-01HW531513 sysrepo-plugind[37698]: sysrepo-plugind error: Failed to connect (Operation not supported)
+Feb 27 15:18:53 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Main process exited, code=exited, status=1/FAILURE
+Feb 27 15:18:53 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Failed with result 'exit-code'.
+Feb 27 15:18:53 tcs-01HW531513 systemd[1]: Failed to start sysrepo-plugind.service - Sysrepo plugin daemon.
+Feb 27 15:18:53 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Scheduled restart job, restart counter is at 4.
+Feb 27 15:18:53 tcs-01HW531513 systemd[1]: Starting sysrepo-plugind.service - Sysrepo plugin daemon...
+Feb 27 15:18:53 tcs-01HW531513 sysrepo-plugind[37700]: [ERR] Shared memory repository path mismatch (in SHM "/home/tcs/Sysrepo/>
+Feb 27 15:18:53 tcs-01HW531513 sysrepo-plugind[37700]: sysrepo-plugind error: Failed to connect (Operation not supported)
+Feb 27 15:18:53 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Main process exited, code=exited, status=1/FAILURE
+Feb 27 15:18:53 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Failed with result 'exit-code'.
+Feb 27 15:18:53 tcs-01HW531513 systemd[1]: Failed to start sysrepo-plugind.service - Sysrepo plugin daemon.
+Feb 27 15:18:53 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Scheduled restart job, restart counter is at 5.
+Feb 27 15:18:53 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Start request repeated too quickly.
+Feb 27 15:18:53 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Failed with result 'exit-code'.
+Feb 27 15:18:53 tcs-01HW531513 systemd[1]: Failed to start sysrepo-plugind.service - Sysrepo plugin daemon.
+Feb 27 15:24:18 tcs-01HW531513 systemd[1]: Starting sysrepo-plugind.service - Sysrepo plugin daemon...
+Feb 27 15:24:18 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Main process exited, code=exited, status=1/FAILURE
+Feb 27 15:24:18 tcs-01HW531513 sysrepo-plugind[38215]: [ERR] Shared memory repository path mismatch (in SHM "/home/tcs/Sysrepo/>
+Feb 27 15:24:18 tcs-01HW531513 sysrepo-plugind[38215]: sysrepo-plugind error: Failed to connect (Operation not supported)
+Feb 27 15:24:18 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Failed with result 'exit-code'.
+Feb 27 15:24:18 tcs-01HW531513 systemd[1]: Failed to start sysrepo-plugind.service - Sysrepo plugin daemon.
+Feb 27 15:24:18 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Scheduled restart job, restart counter is at 1.
+Feb 27 15:24:18 tcs-01HW531513 systemd[1]: Starting sysrepo-plugind.service - Sysrepo plugin daemon...
+Feb 27 15:24:18 tcs-01HW531513 sysrepo-plugind[38218]: [ERR] Shared memory repository path mismatch (in SHM "/home/tcs/Sysrepo/>
+Feb 27 15:24:18 tcs-01HW531513 sysrepo-plugind[38218]: sysrepo-plugind error: Failed to connect (Operation not supported)
+Feb 27 15:24:18 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Main process exited, code=exited, status=1/FAILURE
+Feb 27 15:24:18 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Failed with result 'exit-code'.
+Feb 27 15:24:18 tcs-01HW531513 systemd[1]: Failed to start sysrepo-plugind.service - Sysrepo plugin daemon.
+Feb 27 15:24:18 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Scheduled restart job, restart counter is at 2.
+Feb 27 15:24:18 tcs-01HW531513 systemd[1]: Starting sysrepo-plugind.service - Sysrepo plugin daemon...
+Feb 27 15:24:18 tcs-01HW531513 sysrepo-plugind[38220]: [ERR] Shared memory repository path mismatch (in SHM "/home/tcs/Sysrepo/>
+Feb 27 15:24:18 tcs-01HW531513 sysrepo-plugind[38220]: sysrepo-plugind error: Failed to connect (Operation not supported)
+Feb 27 15:24:18 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Main process exited, code=exited, status=1/FAILURE
+Feb 27 15:24:18 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Failed with result 'exit-code'.
+Feb 27 15:24:18 tcs-01HW531513 systemd[1]: Failed to start sysrepo-plugind.service - Sysrepo plugin daemon.
+Feb 27 15:24:18 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Scheduled restart job, restart counter is at 3.
+Feb 27 15:24:18 tcs-01HW531513 systemd[1]: Starting sysrepo-plugind.service - Sysrepo plugin daemon...
+Feb 27 15:24:19 tcs-01HW531513 sysrepo-plugind[38235]: [ERR] Shared memory repository path mismatch (in SHM "/home/tcs/Sysrepo/>
+Feb 27 15:24:19 tcs-01HW531513 sysrepo-plugind[38235]: sysrepo-plugind error: Failed to connect (Operation not supported)
+Feb 27 15:24:19 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Main process exited, code=exited, status=1/FAILURE
+Feb 27 15:24:19 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Failed with result 'exit-code'.
+Feb 27 15:24:19 tcs-01HW531513 systemd[1]: Failed to start sysrepo-plugind.service - Sysrepo plugin daemon.
+Feb 27 15:24:19 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Scheduled restart job, restart counter is at 4.
+Feb 27 15:24:19 tcs-01HW531513 systemd[1]: Starting sysrepo-plugind.service - Sysrepo plugin daemon...
+Feb 27 15:24:19 tcs-01HW531513 sysrepo-plugind[38243]: [ERR] Shared memory repository path mismatch (in SHM "/home/tcs/Sysrepo/>
+Feb 27 15:24:19 tcs-01HW531513 sysrepo-plugind[38243]: sysrepo-plugind error: Failed to connect (Operation not supported)
+Feb 27 15:24:19 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Main process exited, code=exited, status=1/FAILURE
+Feb 27 15:24:19 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Failed with result 'exit-code'.
+Feb 27 15:24:19 tcs-01HW531513 systemd[1]: Failed to start sysrepo-plugind.service - Sysrepo plugin daemon.
+Feb 27 15:24:19 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Scheduled restart job, restart counter is at 5.
+Feb 27 15:24:19 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Start request repeated too quickly.
+Feb 27 15:24:19 tcs-01HW531513 systemd[1]: sysrepo-plugind.service: Failed with result 'exit-code'.
+Feb 27 15:24:19 tcs-01HW531513 systemd[1]: Failed to start sysrepo-plugind.service - Sysrepo plugin daemon.
+
+tcs@tcs-01HW531513:~/Sysrepo$ sudo rm -rf /dev/shm/*
+tcs@tcs-01HW531513:~/Sysrepo$ sudo systemctl start sysrepo-plugind
+tcs@tcs-01HW531513:~/Sysrepo$ sudo systemctl status sysrepo-plugind
+● sysrepo-plugind.service - Sysrepo plugin daemon
+     Loaded: loaded (/usr/local/lib/systemd/system/sysrepo-plugind.service; enabled; preset: enabled)
+     Active: active (running) since Thu 2025-02-27 15:26:38 IST; 31s ago
+   Main PID: 40893 (sysrepo-plugind)
+      Tasks: 3 (limit: 9195)
+     Memory: 1.9M (peak: 2.6M)
+        CPU: 62ms
+     CGroup: /system.slice/sysrepo-plugind.service
+             └─40893 /usr/local/bin/sysrepo-plugind -d -v2
+
+Feb 27 15:26:36 tcs-01HW531513 systemd[1]: Starting sysrepo-plugind.service - Sysrepo plugin daemon...
+Feb 27 15:26:38 tcs-01HW531513 systemd[1]: Started sysrepo-plugind.service - Sysrepo plugin daemon.
