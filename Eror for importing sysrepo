@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/home/tcs/Sysrepo/Python1/sysnot.py", line 1, in <module>
+    import sysrepo
+  File "/home/tcs/.local/lib/python3.12/site-packages/sysrepo/__init__.py", line 4, in <module>
+    from .change import (
+  File "/home/tcs/.local/lib/python3.12/site-packages/sysrepo/change.py", line 6, in <module>
+    import libyang
+  File "/home/tcs/.local/lib/python3.12/site-packages/libyang/__init__.py", line 7, in <module>
+    from .context import Context
+  File "/home/tcs/.local/lib/python3.12/site-packages/libyang/context.py", line 9, in <module>
+    from _libyang import ffi, lib
+ImportError: /home/tcs/.local/lib/python3.12/site-packages/_libyang.cpython-312-x86_64-linux-gnu.so: undefined symbol: lyd_leafref_link_node_tree
