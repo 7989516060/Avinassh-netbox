@@ -117,3 +117,21 @@ tcs@tcs-01HW531513:~/Sysrepo/Codes$ python3 yangsys.py
 2025-02-28 15:39:01,292 - INFO - 🔍 Monitoring modules: ietf-interfaces, ietf-netconf
 Segmentation fault
 
+
+---- - _ _ _ __--- --- -
+A segmentation fault typically happens when there is an invalid memory access, often due to incorrect usage of a library or underlying C bindings. In the case of sysrepo, this issue can stem from incorrect interaction with the library, like invalid memory handling or resource cleanup.
+
+Here are a few things we can try to resolve or better understand the problem:
+Potential Causes of Segmentation Fault:
+
+    Library Compatibility: The sysrepo Python bindings rely on underlying C code, so an issue with how the C code interacts with Python can lead to a segmentation fault.
+    Incorrect Memory Access: If the subscription or the session is not being set up correctly, it could lead to memory issues.
+    Environment Issues: Sometimes, mismatches in versions of libraries (like libyang or sysrepo itself) can cause segmentation faults.
+
+Steps to Address the Segmentation Fault:
+
+    Ensure Proper Cleanup: One common cause of segmentation faults is improper cleanup of resources. This includes:
+        Ensuring that the session is stopped properly.
+        Ensuring that sysrepo connection is disconnected properly.
+
+    Simplify the Subscription: To isolate the issue, let's simplify the code and check if the segmentation fault occurs during a basic subscription.
