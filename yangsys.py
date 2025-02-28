@@ -119,19 +119,22 @@ Segmentation fault
 
 
 ---- - _ _ _ __--- --- -
-A segmentation fault typically happens when there is an invalid memory access, often due to incorrect usage of a library or underlying C bindings. In the case of sysrepo, this issue can stem from incorrect interaction with the library, like invalid memory handling or resource cleanup.
+The segmentation fault you're encountering likely stems from an issue with how the Sysrepo C bindings are being used. Specifically, it can occur due to improper resource management, memory allocation, or a bug within the sysrepo library itself when interacting with certain operations, like starting a session or fetching data.
+Let's break down the key steps and address the issue:
+Possible Causes of Segmentation Fault:
 
-Here are a few things we can try to resolve or better understand the problem:
-Potential Causes of Segmentation Fault:
+    Session Handling: Sysrepo interacts with C libraries, and improper session handling can lead to segmentation faults, especially when you're polling data in a loop.
+    Polling Mechanism: Continuous polling of Sysrepo might cause memory issues if resources aren't cleaned up correctly, or if the polling interval is too short, resulting in overload.
+    Sysrepo Version: There might be compatibility issues with the current version of Sysrepo you're using and its interaction with your environment.
 
-    Library Compatibility: The sysrepo Python bindings rely on underlying C code, so an issue with how the C code interacts with Python can lead to a segmentation fault.
-    Incorrect Memory Access: If the subscription or the session is not being set up correctly, it could lead to memory issues.
-    Environment Issues: Sometimes, mismatches in versions of libraries (like libyang or sysrepo itself) can cause segmentation faults.
+Proposed Solution Steps:
 
-Steps to Address the Segmentation Fault:
+    Ensure Proper Resource Management:
+        You need to make sure that sessions and connections are managed properly, especially if you're running them in a loop.
+        Cleanly disconnect sessions after each polling cycle or when the program ends.
 
-    Ensure Proper Cleanup: One common cause of segmentation faults is improper cleanup of resources. This includes:
-        Ensuring that the session is stopped properly.
-        Ensuring that sysrepo connection is disconnected properly.
+    Add More Debugging Information:
+        Check if the segmentation fault happens during a specific operation (e.g., connection, session, or polling).
+        Add more logging around critical sections to isolate where the fault occurs.
 
-    Simplify the Subscription: To isolate the issue, let's simplify the code and check if the segmentation fault occurs during a basic subscription.
+    Try a Simplified Polling Mechanism: Let's isolate the issue by simplifying your polling function to only fetch data once per loop iteration and handle the session lifecycle more carefully.
