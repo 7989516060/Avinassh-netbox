@@ -95,3 +95,17 @@ XPath: /ietf-netconf-notifications:netconf-notification
 Program completed.
 
 
+
+
+
+
+exp:
+-------
+Code Explanation:
+-------------------
+This Python script subscribes to Sysrepo notifications using a callback function. The callback function is defined using ctypes to match the expected signature by Sysrepo. The script simulates the notification by manually calling the callback with sample data (e.g., "example-key1" and "example-key2") after the subscription.
+
+Output Explanation:
+-------------------
+The output shows that the script attempts to subscribe to notifications but encounters an error because Sysrepo expects the callback to be in a specific format, even though the callback is defined as a function. Despite the error, the script simulates a notification and prints the received data ("example-key1", "example-key2") as intended.
+
